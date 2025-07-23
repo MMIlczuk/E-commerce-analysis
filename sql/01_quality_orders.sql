@@ -67,17 +67,18 @@ GROUP BY order_status;
 -- dla większości braki danych w datach są to wartości logiczne, jednak braki w wartościach dla statusu delivered świadczą o zaistniałych anomaliach
 
 create table commerce.orders_dataset_cleaned as
-	select order_id,
+select 
+    order_id,
     customer_id,
     order_status,
-    STR_TO_DATE(NULLIF(order_purchase_timestamp, '')'%Y-%m-%d %H:%i:%s') AS order_purchase_timestamp,
-    STR_TO_DATE(NULLIF(order_approved_at, '')'%Y-%m-%d %H:%i:%s') AS order_approved_at,
-    STR_TO_DATE(NULLIF(order_delivered_carrier_date, '')'%Y-%m-%d %H:%i:%s') AS order_delivered_carrier_date,
-    STR_TO_DATE(NULLIF(order_delivered_customer_date, '')'%Y-%m-%d %H:%i:%s') AS order_delivered_customer_date,
-    STR_TO_DATE(NULLIF(order_estimated_delivery_date, '')'%Y-%m-%d %H:%i:%s') AS order_estimated_delivery_date
-    from commerce.olist_orders_dataset
+    STR_TO_DATE(NULLIF(order_purchase_timestamp, ''), '%Y-%m-%d %H:%i:%s') AS order_purchase_timestamp,
+    STR_TO_DATE(NULLIF(order_approved_at, ''), '%Y-%m-%d %H:%i:%s') AS order_approved_at,
+    STR_TO_DATE(NULLIF(order_delivered_carrier_date, ''), '%Y-%m-%d %H:%i:%s') AS order_delivered_carrier_date,
+    STR_TO_DATE(NULLIF(order_delivered_customer_date, ''), '%Y-%m-%d %H:%i:%s') AS order_delivered_customer_date,
+    STR_TO_DATE(NULLIF(order_estimated_delivery_date, ''), '%Y-%m-%d %H:%i:%s') AS order_estimated_delivery_date
+from commerce.olist_orders_dataset;
 
-    
+
     
     
     
