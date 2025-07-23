@@ -1,0 +1,9 @@
+order_status,pusty_approved_at,pusty_carrier,pusty_customer
+delivered,14,2,8
+invoiced,0,314,314
+shipped,0,0,1107
+processing,0,301,301
+unavailable,0,609,609
+canceled,141,550,619
+created,5,5,5
+approved,0,2,2
