@@ -66,6 +66,9 @@ GROUP BY order_status;
 
 -- dla większości braki danych w datach są to wartości logiczne, jednak braki w wartościach dla statusu delivered świadczą o zaistniałych anomaliach
 
+
+-- Utworzenie tabeli ze zmienionymi typami danych która posłuży do analizyy
+
 create table commerce.orders_dataset_cleaned as
 select 
     order_id,
@@ -79,9 +82,37 @@ select
 from commerce.olist_orders_dataset;
 
 
-    
-    
-    
-    
 
+select order_id, order_delivered_customer_date, order_approved_at
+from commerce.orders_dataset_cleaned
+where order_delivered_customer_date < order_approved_at
+;
+
+-- wykryto 61 rekordów które zawierają nielogiczne anomalie wynikające z wcześniejszej daty dostawy do klienta od daty zaakceptowania płatności
+-- oznaczono je w kolumnie 'order_apoved_anomaly'
+
+alter table commerce.orders_dataset_cleaned
+add column deliver_aproved_anomaly boolean
+;
+
+update commerce.orders_dataset_cleaned
+set deliver_aproved_anomaly = 
+case 
+	when order_approved_at > order_delivered_customer_date then TRUE
+	else FALSE
+end;
+
+-- dodano czas dostawy (w dniach), wartość przydatną w późniejszej analizie
+
+alter table commerce.orders_dataset_cleaned
+add column deliver_time int
+;
+
+
+update commerce.orders_dataset_cleaned
+set deliver_time = 
+case 
+	when deliver_aproved_anomaly is TRUE then null
+	else datediff(order_delivered_customer_date, order_approved_at)
+end;
 
